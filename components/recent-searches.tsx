@@ -1,5 +1,6 @@
 "use client";
 
+import { SongLinks } from "@/components/song-links";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchRecentAnalyses } from "@/lib/api-client";
@@ -64,11 +65,8 @@ export function RecentSearches() {
         <ul className="divide-border divide-y">
           {data.map((entry) => (
             <li key={entry.id}>
-              <Link
-                href={`/analysis/${entry.id}`}
-                className="hover:bg-muted/60 -mx-2 flex items-center justify-between gap-3 rounded-lg px-2 py-3 transition-colors"
-              >
-                <div className="flex min-w-0 items-center gap-3">
+              <div className="hover:bg-muted/60 -mx-2 flex flex-col gap-3 rounded-lg px-2 py-3 transition-colors sm:flex-row sm:items-center sm:justify-between">
+                <Link href={`/analysis/${entry.id}`} className="flex min-w-0 flex-1 items-center gap-3">
                   <div className="bg-primary/10 text-primary flex size-9 shrink-0 items-center justify-center rounded-lg">
                     <Music2 className="size-4" />
                   </div>
@@ -76,11 +74,14 @@ export function RecentSearches() {
                     <p className="truncate font-medium">{entry.title}</p>
                     <p className="text-muted-foreground truncate text-sm">{entry.artist}</p>
                   </div>
+                </Link>
+                <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
+                  <SongLinks song={{ artist: entry.artist, title: entry.title }} />
+                  <span className="text-muted-foreground w-full text-xs sm:w-auto sm:text-right">
+                    {formatRelativeTime(entry.createdAt)}
+                  </span>
                 </div>
-                <span className="text-muted-foreground shrink-0 text-xs">
-                  {formatRelativeTime(entry.createdAt)}
-                </span>
-              </Link>
+              </div>
             </li>
           ))}
         </ul>

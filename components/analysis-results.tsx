@@ -15,6 +15,7 @@ import {
   Tags,
 } from "lucide-react";
 import { ShareLink } from "@/components/share-link";
+import { SongLinks } from "@/components/song-links";
 
 function categoryBadgeVariant(category: LabelCategory) {
   switch (category) {
@@ -119,15 +120,18 @@ function ResultsView({
       <Card>
         <CardHeader>
           <div className="flex flex-wrap items-start justify-between gap-3">
-            <div className="space-y-1.5">
-              <CardTitle className="flex flex-wrap items-center gap-2 text-xl">
-                <Sparkles className="text-primary size-5" />
-                {data.song.title}
-                <span className="text-muted-foreground font-normal">by {data.song.artist}</span>
-              </CardTitle>
-              <CardDescription>
-                Lyrics source: {data.lyricsSource} · {data.labels.length} patterns detected
-              </CardDescription>
+            <div className="space-y-3">
+              <div className="space-y-1.5">
+                <CardTitle className="flex flex-wrap items-center gap-2 text-xl">
+                  <Sparkles className="text-primary size-5" />
+                  {data.song.title}
+                  <span className="text-muted-foreground font-normal">by {data.song.artist}</span>
+                </CardTitle>
+                <CardDescription>
+                  Lyrics source: {data.lyricsSource} · {data.labels.length} patterns detected
+                </CardDescription>
+              </div>
+              <SongLinks song={data.song} />
             </div>
             {showShareLink && analysisId && <ShareLink analysisId={analysisId} />}
           </div>
