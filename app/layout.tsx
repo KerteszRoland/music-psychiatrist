@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { baseMetadata } from "@/lib/metadata";
 import { Providers } from "./providers";
 import "./globals.css";
 
@@ -13,11 +14,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Music Psychiatrist",
-  description:
-    "Analyze song lyrics for schema therapy patterns, modes, and psychological signals.",
-};
+export const metadata: Metadata = baseMetadata;
 
 export default function RootLayout({
   children,
