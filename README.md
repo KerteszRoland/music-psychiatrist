@@ -35,6 +35,21 @@ Set these in `.env` locally and in the Vercel project dashboard for production:
 | `OPENAI_COMPATIBLE_API_KEY` | Required when `AI_PROVIDER=openai-compatible` |
 | `OPENAI_COMPATIBLE_BASE_URL` | Base URL for compatible providers |
 
+## Storage
+
+Analyses are saved after each run and can be reopened via shareable links:
+
+- **Production (Vercel):** [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) — set `BLOB_READ_WRITE_TOKEN` (auto-linked if you create a Blob store in the Vercel dashboard)
+- **Local dev:** `.data/` folder (no token needed)
+
+Shareable URL format: `/analysis/{id}`
+
+Previously analyzed songs are returned from cache instantly (no new AI call).
+
+## OpenRouter credits
+
+When using `AI_PROVIDER=openai-compatible` with OpenRouter, the app shows remaining credits on the homepage and blocks new analyses when credits are exhausted.
+
 ## Deploy to Vercel
 
 ```bash

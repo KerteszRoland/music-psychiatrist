@@ -30,6 +30,18 @@ export interface AnalysisResult {
   summary: string;
 }
 
+export interface StoredAnalysis extends AnalysisResult {
+  id: string;
+  createdAt: string;
+}
+
+export interface RecentAnalysisSummary {
+  id: string;
+  artist: string;
+  title: string;
+  createdAt: string;
+}
+
 export type AiProvider = "openai" | "anthropic" | "google" | "openai-compatible";
 
 export interface AnalyzeRequest {
@@ -39,4 +51,17 @@ export interface AnalyzeRequest {
 
 export interface ApiError {
   error: string;
+  code?: "OUT_OF_CREDITS" | "NOT_FOUND" | "VALIDATION_ERROR";
+}
+
+export interface CreditsStatus {
+  available: boolean;
+  provider: "openrouter" | "unknown";
+  limitRemaining: number | null;
+  limit: number | null;
+  usage: number;
+  isFreeTier: boolean;
+  outOfCredits: boolean;
+  lowCredits: boolean;
+  message?: string;
 }

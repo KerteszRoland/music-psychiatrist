@@ -1,28 +1,39 @@
 "use client";
 
-import { AnalysisResults } from "@/components/analysis-results";
+import { CreditsBanner } from "@/components/credits-banner";
+import { RecentSearches } from "@/components/recent-searches";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { analyzeSongRequest } from "@/lib/api-client";
 import type { AnalyzeRequest } from "@/lib/types";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BrainCircuit, Loader2, Music2, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function AnalyzePage() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const [artist, setArtist] = useState("");
   const [title, setTitle] = useState("");
 
   const mutation = useMutation({
     mutationFn: (payload: AnalyzeRequest) => analyzeSongRequest(payload),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["recent"] });
+      queryClient.invalidateQueries({ queryKey: ["credits"] });
+      router.push(`/analysis/${data.id}`);
+    },
   });
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     mutation.mutate({ artist: artist.trim(), title: title.trim() });
   }
+
+  const outOfCredits = mutation.error?.message.includes("credits exhausted");
 
   return (
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-8">
@@ -40,6 +51,8 @@ export function AnalyzePage() {
         </p>
       </section>
 
+      <CreditsBanner />
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -48,6 +61,7 @@ export function AnalyzePage() {
           </CardTitle>
           <CardDescription>
             Lyrics are fetched from public APIs, then analyzed by your configured AI model.
+            Previously analyzed songs open instantly from cache.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -94,14 +108,14 @@ export function AnalyzePage() {
           </form>
 
           {mutation.isError && (
-            <p className="text-destructive mt-4 text-sm">{mutation.error.message}</p>
+            <p className={`mt-4 text-sm ${outOfCredits ? "text-destructive" : "text-destructive"}`}>
+              {mutation.error.message}
+            </p>
           )}
         </CardContent>
       </Card>
 
-      {mutation.isPending && <AnalysisResults.Loading />}
-
-      {mutation.isSuccess && <AnalysisResults data={mutation.data} />}
+      <RecentSearches />
     </div>
   );
 }

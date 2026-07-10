@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CATEGORY_LABELS } from "@/lib/schema-labels";
-import type { AnalysisLabel, AnalysisResult, LabelCategory } from "@/lib/types";
+import type { AnalysisLabel, AnalysisResult, LabelCategory, StoredAnalysis } from "@/lib/types";
 import { confidenceColor, formatConfidence } from "@/lib/utils";
 import {
   AlertCircle,
@@ -14,6 +14,7 @@ import {
   Sparkles,
   Tags,
 } from "lucide-react";
+import { ShareLink } from "@/components/share-link";
 
 function categoryBadgeVariant(category: LabelCategory) {
   switch (category) {
@@ -104,19 +105,32 @@ function LoadingState() {
   );
 }
 
-function ResultsView({ data }: { data: AnalysisResult }) {
+function ResultsView({
+  data,
+  showShareLink = false,
+}: {
+  data: AnalysisResult | StoredAnalysis;
+  showShareLink?: boolean;
+}) {
+  const analysisId = "id" in data ? data.id : undefined;
+
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="flex flex-wrap items-center gap-2 text-xl">
-            <Sparkles className="text-primary size-5" />
-            {data.song.title}
-            <span className="text-muted-foreground font-normal">by {data.song.artist}</span>
-          </CardTitle>
-          <CardDescription>
-            Lyrics source: {data.lyricsSource} · {data.labels.length} patterns detected
-          </CardDescription>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="space-y-1.5">
+              <CardTitle className="flex flex-wrap items-center gap-2 text-xl">
+                <Sparkles className="text-primary size-5" />
+                {data.song.title}
+                <span className="text-muted-foreground font-normal">by {data.song.artist}</span>
+              </CardTitle>
+              <CardDescription>
+                Lyrics source: {data.lyricsSource} · {data.labels.length} patterns detected
+              </CardDescription>
+            </div>
+            {showShareLink && analysisId && <ShareLink analysisId={analysisId} />}
+          </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm leading-relaxed">{data.summary}</p>
@@ -161,8 +175,14 @@ function ResultsView({ data }: { data: AnalysisResult }) {
   );
 }
 
-export function AnalysisResults({ data }: { data: AnalysisResult }) {
-  return <ResultsView data={data} />;
+export function AnalysisResults({
+  data,
+  showShareLink = false,
+}: {
+  data: AnalysisResult | StoredAnalysis;
+  showShareLink?: boolean;
+}) {
+  return <ResultsView data={data} showShareLink={showShareLink} />;
 }
 
 AnalysisResults.Loading = LoadingState;
