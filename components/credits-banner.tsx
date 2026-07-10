@@ -3,7 +3,8 @@
 import { fetchCreditsStatus } from "@/lib/api-client";
 import { useQuery } from "@tanstack/react-query";
 import { AlertTriangle, Sparkles } from "lucide-react";
-import Link from "next/link";
+
+const SUPPORT_EMAIL = "kerteszroland02@gmail.com";
 
 export function CreditsBanner() {
   const { data } = useQuery({
@@ -28,21 +29,16 @@ export function CreditsBanner() {
           <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-red-500/20 ring-2 ring-red-400/40">
             <AlertTriangle className="size-5 text-red-300" />
           </div>
-          <div className="space-y-1">
-            <p className="text-base font-semibold text-red-100">OpenRouter credits exhausted</p>
-            <p className="text-sm leading-relaxed text-red-200/80">
-              New song analyses are paused. Add credits to continue — cached analyses remain
-              shareable.{" "}
-              <Link
-                href="https://openrouter.ai/settings/credits"
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-red-100 underline underline-offset-4 hover:text-white"
-              >
-                Top up credits
-              </Link>
-            </p>
-          </div>
+          <p className="text-sm leading-relaxed text-red-100">
+            New song analyses are paused for now. Contact{" "}
+            <a
+              href={`mailto:${SUPPORT_EMAIL}`}
+              className="font-medium underline underline-offset-4 hover:text-white"
+            >
+              {SUPPORT_EMAIL}
+            </a>{" "}
+            to support the project.
+          </p>
         </div>
       </div>
     );
@@ -62,20 +58,16 @@ export function CreditsBanner() {
         <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-amber-500/20 ring-2 ring-amber-400/40">
           <Sparkles className="size-5 text-amber-300" />
         </div>
-        <div className="space-y-1">
-          <p className="text-base font-semibold text-amber-100">OpenRouter credits running low</p>
-          <p className="text-sm leading-relaxed text-amber-200/80">
-            You&apos;re below 20% of your credit limit. Top up soon to keep analyzing new songs.{" "}
-            <Link
-              href="https://openrouter.ai/settings/credits"
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium text-amber-100 underline underline-offset-4 hover:text-white"
-            >
-              Add credits
-            </Link>
-          </p>
-        </div>
+        <p className="text-sm leading-relaxed text-amber-100">
+          Few song analyses left. Contact{" "}
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="font-medium underline underline-offset-4 hover:text-white"
+          >
+            {SUPPORT_EMAIL}
+          </a>{" "}
+          to support the project.
+        </p>
       </div>
     </div>
   );

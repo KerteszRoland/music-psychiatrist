@@ -29,7 +29,8 @@ export async function POST(request: Request) {
     if (credits.available && credits.outOfCredits) {
       return NextResponse.json(
         {
-          error: "OpenRouter credits exhausted. Add credits to continue analyzing songs.",
+          error:
+            "New song analyses are temporarily unavailable. Contact kerteszroland02@gmail.com to support the project.",
           code: "OUT_OF_CREDITS",
         } satisfies ApiError,
         { status: 402 },

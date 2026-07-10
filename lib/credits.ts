@@ -126,7 +126,8 @@ export function toApiError(error: unknown): { message: string; code?: "OUT_OF_CR
   const message = error instanceof Error ? error.message : "Analysis failed";
   if (isOutOfCreditsError(error)) {
     return {
-      message: "OpenRouter credits exhausted. Add credits to continue analyzing songs.",
+      message:
+        "New song analyses are temporarily unavailable. Contact kerteszroland02@gmail.com to support the project.",
       code: "OUT_OF_CREDITS",
     };
   }
